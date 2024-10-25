@@ -82,8 +82,6 @@ namespace PerformanceSurvey.Services
             return 0;
         }
 
-
-
         public async Task<SaveTextResponseDto> SaveTextResponseAsync(SaveTextResponseDto textResponseDto)
         {
             // Convert DTO to entity
@@ -107,9 +105,6 @@ namespace PerformanceSurvey.Services
             
 
         }
-
-
-
         public async Task<List<GetResponsesByDepartmentIdDto>> GetResponsesByDepartmentIdAsync(int departmentId)
         {
             // Retrieve the list of Response objects from the repository
@@ -128,13 +123,14 @@ namespace PerformanceSurvey.Services
                 QuestionId = response.QuestionId,
                 DepartmentId = response.DepartmentId,
                 DepartmentName = response.Question?.Department?.DepartmentName ?? "Unknown", // Safe navigation and default value
-                ResponseText = response.ResponseText,
+                ResponseText = string.IsNullOrEmpty(response.ResponseText) ? "NIL" : response.ResponseText, // Check for empty or null
                 OptionId = response.OptionId,
-                Text = response.QuestionOption?.Text ?? "No option text",
-                Score = response.Score,
+                Text = string.IsNullOrEmpty(response.QuestionOption?.Text) ? "NIL" : response.QuestionOption.Text, // Check for empty or null
+                Score = response.Score, 
                 CreatedAt = response.CreatedAt,
-                QuestionText = response.Question?.QuestionText ?? "No question text",
-                
+                QuestionText = response.Question?.QuestionText ?? "No question text"
+
+
             }).ToList();
 
             // Return the list of DTOs
