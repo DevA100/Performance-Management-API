@@ -126,7 +126,8 @@ namespace PerformanceSurvey.Services
                 ResponseText = string.IsNullOrEmpty(response.ResponseText) ? "NIL" : response.ResponseText, // Check for empty or null
                 OptionId = response.OptionId,
                 Text = string.IsNullOrEmpty(response.QuestionOption?.Text) ? "NIL" : response.QuestionOption.Text, // Check for empty or null
-                Score = response.Score, 
+                Score = response.Score,
+                Name = response.User?.Name ?? "Unknown",
                 CreatedAt = response.CreatedAt,
                 QuestionText = response.Question?.QuestionText ?? "No question text"
 
@@ -162,30 +163,28 @@ namespace PerformanceSurvey.Services
             var worksheet = package.Workbook.Worksheets.Add("Responses");
 
             // Add header
-            worksheet.Cells[1, 1].Value = "ResponseId";
            // worksheet.Cells[1, 2].Value = "QuestionId";
             //worksheet.Cells[1, 3].Value = "DepartmentId";
-            worksheet.Cells[1, 4].Value = "DepartmentName";
-            worksheet.Cells[1, 5].Value = "QuestionText"; // Fixed index
-            worksheet.Cells[1, 6].Value = "ResponseText";
-            worksheet.Cells[1, 7].Value = "OptionId";
-            worksheet.Cells[1, 8].Value = "Text"; // Fixed index
-            worksheet.Cells[1, 9].Value = "Score";
-            worksheet.Cells[1, 10].Value = "CreatedAt";
+            worksheet.Cells[1, 1].Value = "DepartmentName";
+            worksheet.Cells[1, 2].Value = "QuestionText"; // Fixed index
+            worksheet.Cells[1, 3].Value = "ResponseText";
+            worksheet.Cells[1, 4].Value = "Text"; // Fixed index
+            worksheet.Cells[1, 5].Value = "Score";
+            worksheet.Cells[1, 6].Value = "UserName";
+            worksheet.Cells[1, 7].Value = "CreatedAt";
             // Populate data
             int row = 2;
             foreach (var response in responses)
             {
-                worksheet.Cells[row, 1].Value = response.ResponseId;
                 //worksheet.Cells[row, 2].Value = response.QuestionId;
                 //worksheet.Cells[row, 3].Value = response.DepartmentId;
-                worksheet.Cells[row, 4].Value = response.Question?.Department?.DepartmentName ?? "Unknown";
-                worksheet.Cells[row, 5].Value = response.Question?.QuestionText ?? "No question text";
-                worksheet.Cells[row, 6].Value = response.ResponseText;
-                worksheet.Cells[row, 7].Value = response.OptionId;
-                worksheet.Cells[row, 8].Value = response.QuestionOption?.Text ?? "No Text Option";
-                worksheet.Cells[row, 9].Value = response.Score;
-                worksheet.Cells[row, 10].Value = response.CreatedAt;
+                worksheet.Cells[row, 1].Value = response.Question?.Department?.DepartmentName ?? "Unknown";
+                worksheet.Cells[row, 2].Value = response.Question?.QuestionText ?? "Nil";
+                worksheet.Cells[row, 3].Value = string.IsNullOrEmpty(response.ResponseText) ? "Nil" : response.ResponseText;
+                worksheet.Cells[row, 4].Value = response.QuestionOption?.Text ?? "Nil";
+                worksheet.Cells[row, 5].Value = response.Score;
+                worksheet.Cells[row, 6].Value = response.User?.Name ?? "Unknown";
+                worksheet.Cells[row, 7].Value = response.CreatedAt;
                 row++;
 
             }

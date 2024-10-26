@@ -6,6 +6,7 @@ using PerformanceSurvey.Repository;
 using PerformanceSurvey.Utilities;
 using System.Text;
 using System.Security.Cryptography;
+using PerformanceSurvey.Models.DTOs.ResponseDTOs;
 
 
 namespace PerformanceSurvey.Services
@@ -370,6 +371,17 @@ namespace PerformanceSurvey.Services
         }
 
 
+        public async Task<IEnumerable<UserResponse>> GetUsersWithPendingAssignmentsAsync()
+        {
+            var users = await _assignmentQuestionRepository.GetUsersWithPendingAssignmentsAsync();
+
+            return users.Select(u => new UserResponse
+            {
+                UserId = u.UserId,
+                Name = u.Name,
+                UserEmail = u.UserEmail
+            }).ToList();
+        }
 
 
     }

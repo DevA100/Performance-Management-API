@@ -63,7 +63,7 @@ public class ResponsesController : ControllerBase
         return Ok("Responses cleared for department " + departmentId);
     }
 
-    // Endpoint to clear all responses
+    //Endpoint to clear all responses
     [Authorize(Roles = "Admin")]
     [HttpDelete("clear-all Responses")]
     public async Task<IActionResult> ClearAllResponses()
@@ -73,7 +73,7 @@ public class ResponsesController : ControllerBase
     }
 
     // Endpoint to download responses by departmentId or all responses if departmentId is not provided
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("downloadResults")]
     public async Task<IActionResult> DownloadResponses([FromQuery] int? departmentId = null)
     {

@@ -30,6 +30,7 @@ namespace PerformanceSurvey.Repository
         public async Task<List<Response>> GetResponsesByDepartmentIdAsync(int departmentId)
         {
             return await _context.responses
+                .Include(r => r.User)
                 .Include(r => r.Question) // Includes Question related data
                 .ThenInclude(q => q.Department) // Includes the Department data from Question
                 .Include(r => r.QuestionOption) // Includes QuestionOption related data

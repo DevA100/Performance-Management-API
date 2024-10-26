@@ -1,5 +1,6 @@
 ﻿using PerformanceSurvey.Models;
 using PerformanceSurvey.Models.DTOs;
+using PerformanceSurvey.Models.DTOs.ResponseDTOs;
 
 namespace PerformanceSurvey.iServices
 {
@@ -14,5 +15,6 @@ namespace PerformanceSurvey.iServices
 
         Task<IEnumerable<GetQuestionByDepartmentDto>> GetAssignmentQuestionsByUserIdsAsync(IEnumerable<int> userIds);
         Task DeleteAnsweredAssignmentQuestionsByUserIdAsync(int userId);
+        Task<IEnumerable<UserResponse>> GetUsersWithPendingAssignmentsAsync();
     }
 }

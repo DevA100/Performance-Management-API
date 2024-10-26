@@ -88,4 +88,13 @@ public class AssignmentQuestionRepository : IAssignmentQuestionRepository
             .FirstOrDefaultAsync(a => a.UserId == userId && a.QuestionId == questionId);
     }
 
+    public async Task<IEnumerable<User>> GetUsersWithPendingAssignmentsAsync()
+    {
+        return await _context.assignment_Question
+            .Where(a => a.status == 0)  // Filter for status 0
+            .Select(a => a.User)        // Select users
+            .Distinct()                 // Ensure unique users
+            .ToListAsync();
+    }
+
 }

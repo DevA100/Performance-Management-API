@@ -17,7 +17,7 @@ namespace PerformanceSurvey.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         // POST: api/AssignmentQuestion/AssignMultipleQuestionsToMultipleUsers
         [HttpPost("AssignQuestionsToSingleUser")]
         public async Task<IActionResult> AssignQuestionsToSingleUser([FromBody] AssignmentQuestionSingleUserDto assignmentQuestionSingleUserDto)
@@ -191,6 +191,22 @@ namespace PerformanceSurvey.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+
+
+        [HttpGet("users-with-pending-assignments")]
+        public async Task<IActionResult> GetUsersWithPendingAssignments()
+        {
+            var users = await _assignmentQuestionService.GetUsersWithPendingAssignmentsAsync();
+
+            if (!users.Any())
+            {
+                return NotFound("No users with pending assignments found.");
+            }
+
+            return Ok(users);
+        }
+
 
     }
 
