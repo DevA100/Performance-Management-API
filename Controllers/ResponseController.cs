@@ -47,7 +47,7 @@ public class ResponsesController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-    [Authorize(Roles = "Admin")]
+   [Authorize(Roles = "Admin")]
     [HttpGet("ResponseBy-departmentId/{departmentId}")]
     public async Task<IActionResult> GetResponsesByDepartmentId(int departmentId)
     {
