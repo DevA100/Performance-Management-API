@@ -134,7 +134,7 @@ namespace PerformanceSurvey.Controllers
         }
 
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("disableUsersById/{id}")]
         public async Task<IActionResult> DisableUser(int id)
         {

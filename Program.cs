@@ -261,9 +261,10 @@ namespace PerformanceSurvey
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/SurveyApi/swagger/v1/swagger.json", "PerformanceSurvey API V1"); // Use full path
-                c.RoutePrefix = string.Empty;
-                //c.SwaggerEndpoint("/swagger/v1/swagger.json", "PerformanceSurvey API V1");
+                //c.SwaggerEndpoint("/SurveyApi/swagger/v1/swagger.json", "PerformanceSurvey API V1"); // Use full path
+                //c.RoutePrefix = string.Empty;
+                //on production
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PerformanceSurvey API V1");
             });
 
             //app.UseSwagger();
