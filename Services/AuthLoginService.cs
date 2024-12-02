@@ -48,7 +48,12 @@ namespace PerformanceSurvey.Services
 
             // Send email to the newly created admin
             var emailSubject = "Admin Account Created";
-            var emailBody = $"Hello {adminUser.Name},\n\nYour admin account has been created successfully. Here are your login details:\n\nEmail: {adminUser.UserEmail}\nPassword: {adminUserDto.Password}";
+            var emailBody = $"Hello {adminUser.Name},\n\n" +
+                  "Your admin account has been created successfully. Here are your login details:\n\n" +
+                  $"Email: {adminUser.UserEmail}\n" +
+                  $"Password: {adminUserDto.Password}\n\n" +
+                  $"You can log in using the URL: https://performanceportal.jubileelifeng.com/performancesurvey/";
+
 
             // Use the email service to send the email
             await _emailService.SendEmailAsync(adminUser.UserEmail, emailSubject, emailBody);

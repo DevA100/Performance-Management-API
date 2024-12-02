@@ -252,13 +252,19 @@ namespace PerformanceSurvey
             var app = builder.Build();
             // Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment())
-            
-                //app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PerformanceSurvey API V1");
-                });
+            //{
+
+            //    app.UseDeveloperExceptionPage();
+            //}
+            app.UseSwagger();
+
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/SurveyApi/swagger/v1/swagger.json", "PerformanceSurvey API V1"); // Use full path
+                c.RoutePrefix = string.Empty;
+                //c.SwaggerEndpoint("/swagger/v1/swagger.json", "PerformanceSurvey API V1");
+            });
 
             //app.UseSwagger();
             //app.UseSwaggerUI(c =>

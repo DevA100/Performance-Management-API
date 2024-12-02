@@ -70,7 +70,15 @@ namespace PerformanceSurvey.Services
                 await _userRepository.UpdateUserPasswordAsync(user);
 
                 // Compose the email content
-                var emailBody = $"Hello {user.Name},<br>Your new password is: <b>{newPassword}</b>";
+                var emailBody = $@"
+    Hello {user.Name},<br><br>
+    You have a request pending from Performance Management. Please log in to the platform to attend to it.<br><br>
+    <b>Use your email and the following password:</b> <b>{newPassword}</b><br><br>
+    <a href='https://performanceportal.jubileelifeng.com/performancesurvey/
+' style='color: #1a73e8;'>Click here to access the platform</a><br><br>
+    Best regards,<br>
+    Performance Management Team
+";
 
                 // Send the new password to the user via email
                 await _emailService.SendEmailAsync(user.UserEmail, "Your New Password", emailBody);
@@ -130,7 +138,15 @@ namespace PerformanceSurvey.Services
                 await _userRepository.UpdateUserPasswordAsync(user);
 
                 // Compose the email content
-                var emailBody = $"Hello {user.Name},<br>Your new password is: <b>{newPassword}</b>";
+                var emailBody = $@"
+    Hello {user.Name},<br><br>
+    You have a request pending from Performance Management. Please log in to the platform to attend to it.<br><br>
+    <b>Use your email and the following password:</b> <b>{newPassword}</b><br><br>
+    <a href='https://performanceportal.jubileelifeng.com/performancesurvey/
+' style='color: #1a73e8;'>Click here to access the platform</a><br><br>
+    Best regards,<br>
+    Performance Management Team
+";
 
                 // Send the new password to the user via email
                 await _emailService.SendEmailAsync(user.UserEmail, "Your New Password", emailBody);
@@ -178,7 +194,15 @@ namespace PerformanceSurvey.Services
                 await _userRepository.UpdateUserPasswordAsync(user);
 
                 // Compose the email content
-                var emailBody = $"Hello {user.Name},<br>Your new password is: <b>{newPassword}</b>";
+                var emailBody = $@"
+    Hello {user.Name},<br><br>
+    You have a request pending from Performance Management. Please log in to the platform to attend to it.<br><br>
+    <b>Use your email and the following password:</b> <b>{newPassword}</b><br><br>
+    <a href='https://performanceportal.jubileelifeng.com/performancesurvey/
+' style='color: #1a73e8;'>Click here to access the platform</a><br><br>
+    Best regards,<br>
+    Performance Management Team
+";
 
                 // Send the new password to the user via email
                 await _emailService.SendEmailAsync(user.UserEmail, "Your New Password", emailBody);
@@ -226,7 +250,15 @@ namespace PerformanceSurvey.Services
                 await _userRepository.UpdateUserPasswordAsync(user);
 
                 // Compose the email content
-                var emailBody = $"Hello {user.Name},<br>Your new password is: <b>{newPassword}</b>";
+                var emailBody = $@"
+    Hello {user.Name},<br><br>
+    You have a request pending from Performance Management. Please log in to the platform to attend to it.<br><br>
+    <b>Use your email and the following password:</b> <b>{newPassword}</b><br><br>
+    <a href='https://performanceportal.jubileelifeng.com/performancesurvey/
+' style='color: #1a73e8;'>Click here to access the platform</a><br><br>
+    Best regards,<br>
+    Performance Management Team
+";
 
                 // Send the new password to the user via email
                 await _emailService.SendEmailAsync(user.UserEmail, "Your New Password", emailBody);
@@ -276,7 +308,15 @@ namespace PerformanceSurvey.Services
             await _userRepository.UpdateUserPasswordAsync(user);
 
             // Compose the email content
-            var emailBody = $"Hello {user.Name},<br>Your new password is: <b>{newPassword}</b>";
+            var emailBody = $@"
+    Hello {user.Name},<br><br>
+    You have a request pending from Performance Management. Please log in to the platform to attend to it.<br><br>
+    <b>Use your email and the following password:</b> <b>{newPassword}</b><br><br>
+    <a href='https://performanceportal.jubileelifeng.com/performancesurvey/
+' style='color: #1a73e8;'>Click here to access the platform</a><br><br>
+    Best regards,<br>
+    Performance Management Team
+";
 
             // Send the new password to the user via email
             await _emailService.SendEmailAsync(user.UserEmail, "Your New Password", emailBody);
