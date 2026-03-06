@@ -13,11 +13,11 @@ namespace PerformanceSurvey.Services
 
         public EmailService()
         {
-            _apiKey = "wSsVR60g+halB6d4njb+L+Y6nFhUDlL+HR8u2lL1vietGPvC98c4xk2YBA7zFKdNR2dsEjYUprt/mhwF22VajtgoyFBUCCiF9mqRe1U4J3x17qnvhDzCX25ZmhOJLYMJxQhummRhE8km+g=="; // Replace with your actual API key
-            _baseAddress = "https://api.zeptomail.com/v1.1/email";
+            _apiKey = "Your_Key"; // Replace with your actual API key
+            _baseAddress = "https://example_emailAPI.com";
         }
 
-        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        public async Task SendEmailAsync(string Recepient, string Title, string body)
         {
             try
             {
@@ -32,14 +32,14 @@ namespace PerformanceSurvey.Services
                 {
                     from = new
                     {
-                        address = "e-info@jubileelifeng.com",
-                        name = "Performance Management Survey"
+                        address = "example.com",
+                        name = "your-Sender"
                     },
                     to = new[]
                     {
-                new { email_address = new { address = toEmail, name = toEmail } }
+                new { email_address = new { address = Recepient, name = Recepient } }
             },
-                    subject = subject,
+                    subject = Title,
                     htmlbody = body
                 };
 
@@ -59,14 +59,12 @@ namespace PerformanceSurvey.Services
                         using (var sr = new StreamReader(responseStream))
                         {
                             var responseContent = await sr.ReadToEndAsync();
-                            // Optionally handle the response content as needed
                         }
                     }
                 }
             }
             catch (WebException ex)
             {
-                // Handle exceptions such as failed requests or timeouts
                 throw new Exception("Failed to send email", ex);
             }
         }

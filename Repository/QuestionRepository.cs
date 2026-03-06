@@ -75,14 +75,14 @@ namespace PerformanceSurvey.Repository
         {
             return await _context.questions
                 .Where(dq => dq.DepartmentId == departmentId && !dq.IsDisabled)
-                .Include(dq => dq.Options) // Include related options if needed
+                .Include(dq => dq.Options) 
                 .ToListAsync();
         }
         public async Task<IEnumerable<Question>> GetDepartmentQuestionsByDepartmentIdsAsync(IEnumerable<int> departmentId)
         {
             return await _context.questions
                 .Where(dq => departmentId.Contains(dq.DepartmentId) && !dq.IsDisabled)
-                .Include(dq => dq.Options) // Include related options if needed
+                .Include(dq => dq.Options) 
                 .ToListAsync();
         }
     }

@@ -19,30 +19,13 @@ namespace PerformanceSurvey.Controllers
             _logger = logger;
         }
 
-        //[HttpPost("Adminlogin")]
-        //public async Task<IActionResult> Adminlogin([FromBody] LoginDto loginDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var adminUser = await _authLoginService.AuthenticateAdminUserAsync(loginDto.UserEmail, loginDto.Password);
-
-        //    if (adminUser == null)
-        //    {
-        //        return Unauthorized("Invalid email or password.");
-        //    }
-
-        //    return Ok(adminUser); // This can be modified to include a token if authentication is extended
-        //}
+        
 
 
 
         [HttpPost("create-admin-user")]
         public async Task<IActionResult> CreateAdminUser([FromBody] CreateAdminUserRequest createAdminUserDto)
         {
-            // Validate the input (ensure required fields are provided)
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -52,37 +35,17 @@ namespace PerformanceSurvey.Controllers
             {
                 return BadRequest("Invalid Key, Request key from super Admin");
             }
-            // Call the service method to create the admin user
             var adminUser = await _authLoginService.CreateAdminUserAsync(createAdminUserDto);
             if (adminUser == null)
             {
                 return BadRequest("Failed to create admin user.");
             }
 
-            // Return the newly created admin user details
             return Ok(adminUser);
         }
 
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
-        //{
-        //    // Step 1: Validate input
-        //    if (string.IsNullOrEmpty(loginDto.UserEmail) || string.IsNullOrEmpty(loginDto.Password))
-        //    {
-        //        return BadRequest("Email and password are required.");
-        //    }
-
-        //    // Step 2: Authenticate the user
-        //    var user = await _authLoginService.AuthenticateUserAsync(loginDto.UserEmail, loginDto.Password);
-        //    if (user == null)
-        //    {
-        //        return Unauthorized("Invalid email or password.");
-        //    }
-
-        //    // Step 3: Return success response (optionally generate and return a JWT token)
-        //    return Ok(user);
-        //}
+        
 
 
         [HttpPost("login")]
@@ -92,10 +55,10 @@ namespace PerformanceSurvey.Controllers
 
             if (result == null)
             {
-                return Unauthorized(new { message = "Invalid credentials" }); // This response is correct for invalid credentials
+                return Unauthorized(new { message = "Invalid credentials" }); 
             }
 
-            return Ok(result); // Return the successful authentication response
+            return Ok(result); 
         }
 
 
@@ -110,7 +73,7 @@ namespace PerformanceSurvey.Controllers
             }
 
             token = token.Replace("Bearer ", "");
-            await _authLoginService.RevokeTokenAsync(token); // Revoke the token
+            await _authLoginService.RevokeTokenAsync(token); 
 
             return Ok("Token has been revoked");
         }

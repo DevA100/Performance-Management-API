@@ -5,7 +5,8 @@ namespace PerformanceSurvey.Utilities
     public class PasswordGenerator
     {
         private static readonly char[] PasswordCharacters =
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?".ToCharArray();
+     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*".ToCharArray();
+
 
         public static string GenerateSecurePassword(int length = 12)
         {
@@ -16,14 +17,17 @@ namespace PerformanceSurvey.Utilities
 
             using (var rng = new RNGCryptoServiceProvider())
             {
-                var byteArray = new byte[length];
-                rng.GetBytes(byteArray);
+                var password = new char[length]; 
+                var byteArray = new byte[4]; 
 
-                var passwordChars = byteArray
-                    .Select(b => PasswordCharacters[b % PasswordCharacters.Length])
-                    .ToArray();
+                for (int i = 0; i < length; i++)
+                {
+                    rng.GetBytes(byteArray);
+                    var randomIndex = BitConverter.ToUInt32(byteArray, 0) % PasswordCharacters.Length;
+                    password[i] = PasswordCharacters[randomIndex];
+                }
 
-                return new string(passwordChars);
+                return new string(password);
             }
         }
     }

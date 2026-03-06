@@ -11,16 +11,11 @@ namespace PerformanceSurvey.Models
         [Required]
         public int QuestionId { get; set; }
 
-        // Navigation property to Question
         [ForeignKey("QuestionId")]
         public Question? Question { get; set; }
 
         public string? ResponseText { get; set; }
-        //[Required]
-
         public int UserId { get; set; }
-
-        // Navigation property to User
         [ForeignKey("UserId")]
         public User User { get; set; }
         public int DepartmentId { get; set; }

@@ -31,10 +31,8 @@ namespace PerformanceSurvey.Repository
 
         public async Task<User> GetUserByEmailAndPasswordAsync(string email, string password)
         {
-            // Hash the input password to compare with stored hash
             var hashedPassword = HashPassword(password);
 
-            // Fetch user by email and password
             return await _context.users
                 .FirstOrDefaultAsync(u => u.UserEmail == email && u.Password == hashedPassword);
         }

@@ -159,7 +159,7 @@ namespace PerformanceSurvey.Controllers
             return Ok(users);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("admin-email")]
         public async Task<IActionResult> GetAdminEmail()
         {
@@ -170,6 +170,32 @@ namespace PerformanceSurvey.Controllers
             }
             return Ok(email);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("batch-upload")]
+        public async Task<IActionResult> BatchUploadUsers(IFormFile file)
+        {
+            try
+            {
+                var result = await _userService.CreateUsersFromExcelAsync(file);
+                return Ok(new
+                {
+                    Message = $"Processed {result.TotalProcessed} users. Successfully created {result.SuccessCount} users.",
+                    Errors = result.Errors,
+                    SuccessCount = result.SuccessCount,
+                    TotalProcessed = result.TotalProcessed
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = "An error occurred while processing the file." });
+            }
+        }
+
     }
 
 

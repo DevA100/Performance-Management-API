@@ -1,6 +1,7 @@
 ﻿using PerformanceSurvey.Models;
 using PerformanceSurvey.Models.DTOs;
 using PerformanceSurvey.Models.DTOs.ResponseDTOs;
+using PerformanceSurvey.Models.RequestDTOs.ResponseDTOs;
 
 namespace PerformanceSurvey.iServices
 {
@@ -16,5 +17,6 @@ namespace PerformanceSurvey.iServices
         Task<IEnumerable<UserResponse>> GetUsersByDepartmentIdsAsync(IEnumerable<int> departmentId);
         Task<List<UserResponse>> GetUsersByIdsAsync(List<int> userId);
         Task<string> GetAdminEmailAsync();
+        Task<BatchUserResponse> CreateUsersFromExcelAsync(IFormFile file);
     }
 }

@@ -43,7 +43,6 @@ public class ResponsesController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Log exception
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
@@ -63,7 +62,6 @@ public class ResponsesController : ControllerBase
         return Ok("Responses cleared for department " + departmentId);
     }
 
-    //Endpoint to clear all responses
     [Authorize(Roles = "Admin")]
     [HttpDelete("clear-all Responses")]
     public async Task<IActionResult> ClearAllResponses()
@@ -72,8 +70,6 @@ public class ResponsesController : ControllerBase
         return Ok("All responses cleared.");
     }
 
-    // Endpoint to download responses by departmentId or all responses if departmentId is not provided
-    //[Authorize(Roles = "Admin")]
     [HttpGet("downloadResults")]
     public async Task<IActionResult> DownloadResponses([FromQuery] int? departmentId = null)
     {
@@ -86,5 +82,4 @@ public class ResponsesController : ControllerBase
         return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
 
-    // Additional actions for generating reports can be added here
 }

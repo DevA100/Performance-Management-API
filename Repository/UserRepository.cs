@@ -18,7 +18,6 @@ namespace PerformanceSurvey.Repository
             _context = context;
         }
 
-        // Get user by email
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.users
@@ -26,16 +25,13 @@ namespace PerformanceSurvey.Repository
                 .FirstOrDefaultAsync(u => u.UserEmail == email && !u.IsDisabled);
         }
 
-        // Create a new user with hashed password
         public async Task<User> CreateUserAsync(User user)
         {
-            // Hash the user's password before saving
             _context.users.Add(user);
             await _context.SaveChangesAsync();
             return user;
         }
 
-        // Get user by ID
         public async Task<User> GetUserByIdAsync(int id)
         {
             return await _context.users
@@ -51,7 +47,6 @@ namespace PerformanceSurvey.Repository
                 .ToListAsync();
         }
 
-        // Update existing user details
         public async Task<User> UpdateUserAsync(int id, User user)
         {
             var existingUser = await _context.users.FindAsync(id);
@@ -63,7 +58,6 @@ namespace PerformanceSurvey.Repository
             existingUser.UserType = user.UserType;
             existingUser.DepartmentId = user.DepartmentId;
 
-            // Update password if provided
             if (!string.IsNullOrEmpty(user.Password))
             {
                 existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -75,7 +69,6 @@ namespace PerformanceSurvey.Repository
             return existingUser;
         }
 
-        // Retrieve all active users
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.users
@@ -84,7 +77,6 @@ namespace PerformanceSurvey.Repository
                 .ToListAsync();
         }
 
-        // Disable a user by setting IsDisabled to true
         public async Task<bool> DisableUserAsync(int id)
         {
             var user = await _context.users.FindAsync(id);
@@ -98,7 +90,6 @@ namespace PerformanceSurvey.Repository
             return true;
         }
 
-        // Get all active users in a specific department
         public async Task<IEnumerable<User>> GetUsersByDepartmentIdAsync(int departmentId)
         {
             return await _context.users
@@ -111,7 +102,7 @@ namespace PerformanceSurvey.Repository
         {
             if (departmentId == null || !departmentId.Any())
             {
-                return Enumerable.Empty<User>(); // Return an empty collection if no department IDs are provided
+                return Enumerable.Empty<User>(); 
             }
 
             return await _context.users
@@ -121,12 +112,10 @@ namespace PerformanceSurvey.Repository
 
 
 
-        //passwording
 
         public async Task UpdateUserPasswordAsync(User user)
         {
-            // Implementation to update user password in the database
-            // e.g., using Entity Framework Core
+            
             _context.users.Update(user);
             await _context.SaveChangesAsync();
         }

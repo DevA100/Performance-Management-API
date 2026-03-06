@@ -16,6 +16,8 @@ using PerformanceSurvey.Configuration;
 using PerformanceSurvey.Utilities;
 using PerformanceSurvey.Models.RequestDTOs;
 using PerformanceSurvey.Middlewares;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HostFiltering;
 namespace PerformanceSurvey
 {
     public class Program
@@ -24,18 +26,7 @@ namespace PerformanceSurvey
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
 
-            //Register ApplicationDbContext
-
-
-            //builder.Services.AddDbContext<ApplicationDbContext>(Options =>
-
-            //{
-
-            //    Options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-            //});
 
             builder.Services.AddDbContext<ApplicationDbContext>(Options =>
 
@@ -45,13 +36,11 @@ namespace PerformanceSurvey
 
             });
 
-            // Configure JSON serialization options
             builder.Services.AddControllersWithViews()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                    // Optional: Configure other settings if needed
-                    // options.JsonSerializerOptions.MaxDepth = 64;
+
                 });
             builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -66,14 +55,13 @@ namespace PerformanceSurvey
                 options.AddPolicy("AllowAllOrigins",
                     policy =>
                     {
-                        policy.AllowAnyOrigin()  // Allow all origins
-                              .AllowAnyHeader()  // Allow any headers
-                              .AllowAnyMethod(); // Allow any HTTP methods
+                        policy.AllowAnyOrigin()  
+                              .AllowAnyHeader()  
+                              .AllowAnyMethod(); 
                     });
             });
 
 
-            // Register repositories
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -82,7 +70,7 @@ namespace PerformanceSurvey
             builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
             builder.Services.AddScoped<IAuthLoginRepository, AuthLoginRepository>();
 
-
+            builder.Services.AddSingleton(new string[] { "performanceportal.jubileelifeng.com" });
 
             builder.Services.AddScoped<IAuthLoginService, AuthLoginService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -117,44 +105,15 @@ namespace PerformanceSurvey
 
 
 
-            // Configure JWT Authentication
-            //var jwtSettings = builder.Configuration.GetSection("Jwt");
-            //builder.Services.Configure<JwtSettings>(jwtSettings);
-
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //.AddJwtBearer(options =>
-            //{
-            //    var key = builder.Configuration["Jwt:Key"];
-            //    var issuer = builder.Configuration["Jwt:Issuer"];
-            //    var audience = builder.Configuration["Jwt:Audience"];
-
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = true,
-            //        ValidateIssuerSigningKey = true,
-            //        ValidIssuer = issuer,
-            //        ValidAudience = audience,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-            //    };
-            //});
-
-            // Add authorization services
+            
             builder.Services.AddAuthorization();
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-                // Define example for DepartmentQuestionDto
                 c.MapType<MultipleChoiceQuestionRequest>(() => new OpenApiSchema
                 {
                     Type = "object",
@@ -222,7 +181,6 @@ namespace PerformanceSurvey
                     }
                 });
 
-                // Add JWT Authentication to Swagger
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -249,37 +207,82 @@ namespace PerformanceSurvey
     });
 
             });
-            var app = builder.Build();
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
 
-            //    app.UseDeveloperExceptionPage();
-            //}
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.AddServerHeader = false;
+            });
+
+            //host header
+
+            builder.Services.Configure<HostFilteringOptions>(options =>
+            {
+                options.AllowedHosts = new[] { "performanceportal.jubileelifeng.com" };
+            });
+
+            builder.Services.AddHostFiltering(options =>
+            {
+                options.AllowedHosts = new[] { "performanceportal.jubileelifeng.com" };
+            });
+
+
+
+
+            var app = builder.Build();
+            
             app.UseSwagger();
 
 
             app.UseSwaggerUI(c =>
             {
-                //c.SwaggerEndpoint("/SurveyApi/swagger/v1/swagger.json", "PerformanceSurvey API V1"); // Use full path
-                //c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/SurveyApi/swagger/v1/swagger.json", "PerformanceSurvey API V1"); 
+                c.RoutePrefix = string.Empty;
                 //on production
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PerformanceSurvey API V1");
+                //c.SwaggerEndpoint("/swagger/v1/swagger.json", "server name");
+                
             });
 
-            app.UseSwagger();
+            //app.UseSwagger();
             //app.UseSwaggerUI(c =>
             //{
             //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             //    c.RoutePrefix = string.Empty; // This makes the Swagger UI load at the root URL
             //});
+
+
+            
+            app.UseHostFiltering();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.OnStarting(() =>
+                {
+                    context.Response.Headers.Remove("Server");
+                    context.Response.Headers.Remove("X-Powered-By");
+                    context.Response.Headers.Remove("X-AspNet-Version");
+                    context.Response.Headers.Remove("X-AspNetMvc-Version");
+                    return Task.CompletedTask;
+                });
+
+                await next();
+            });
+
+
             app.UseCors("AllowAllOrigins");
 
-            app.UseMiddleware<TokenRevocationMiddleware>();
-            //app.UseHttpsRedirection();
-            app.UseRouting(); // Ensure routing is used
+            app.UseRouting(); 
+
+
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<RemoveSensitiveHeadersMiddleware>();
+            app.UseMiddleware<SecurityHeadersMiddleware>();
+
+            app.UseMiddleware<TokenRevocationMiddleware>();
+            
+            //app.UseHttpsRedirection();
+            
 
 
             app.MapControllers();

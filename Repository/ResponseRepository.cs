@@ -31,9 +31,9 @@ namespace PerformanceSurvey.Repository
         {
             return await _context.responses
                 .Include(r => r.User)
-                .Include(r => r.Question) // Includes Question related data
-                .ThenInclude(q => q.Department) // Includes the Department data from Question
-                .Include(r => r.QuestionOption) // Includes QuestionOption related data
+                .Include(r => r.Question) 
+                .ThenInclude(q => q.Department) 
+                .Include(r => r.QuestionOption) 
                 .Where(r => r.Question.DepartmentId == departmentId)
                 .ToListAsync();
         }

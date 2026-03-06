@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PerformanceSurvey.iServices;
 
 namespace PerformanceSurvey.Controllers
@@ -14,17 +15,18 @@ namespace PerformanceSurvey.Controllers
             _emailService = emailService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("sendEmail")]
         public async Task<IActionResult> SendEmail([FromBody] EmailRequest request)
         {
-            if (string.IsNullOrEmpty(request.ToEmail) || string.IsNullOrEmpty(request.Subject) || string.IsNullOrEmpty(request.Body))
+            if (string.IsNullOrEmpty(request.Recepient) || string.IsNullOrEmpty(request.Title) || string.IsNullOrEmpty(request.Body))
             {
                 return BadRequest("Email, subject, and body are required.");
             }
 
             try
             {
-                await _emailService.SendEmailAsync(request.ToEmail, request.Subject, request.Body);
+                await _emailService.SendEmailAsync(request.Recepient, request.Title, request.Body);
                 return Ok("Email sent successfully.");
             }
             catch (Exception ex)
@@ -36,8 +38,10 @@ namespace PerformanceSurvey.Controllers
 
     public class EmailRequest
     {
-        public string ToEmail { get; set; }
-        public string Subject { get; set; }
+        
+        public string Recepient { get; set; }
+        public string Title { get; set; }
         public string Body { get; set; }
+        public string? Attachments { get; set; }
     }
 }

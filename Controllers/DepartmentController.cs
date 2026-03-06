@@ -59,7 +59,7 @@ namespace PerformanceSurvey.Controllers
         }
 
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("getAllDepartment")]
         public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
         {

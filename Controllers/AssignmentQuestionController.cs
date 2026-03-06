@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PerformanceSurvey.iServices;
 using PerformanceSurvey.Models.DTOs;
+using PerformanceSurvey.Models.DTOs.ResponseDTOs;
 
 namespace PerformanceSurvey.Controllers
 {
@@ -18,7 +19,6 @@ namespace PerformanceSurvey.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        // POST: api/AssignmentQuestion/AssignMultipleQuestionsToMultipleUsers
         [HttpPost("AssignQuestionsToSingleUser")]
         public async Task<IActionResult> AssignQuestionsToSingleUser([FromBody] AssignmentQuestionSingleUserDto assignmentQuestionSingleUserDto)
         {
@@ -40,7 +40,6 @@ namespace PerformanceSurvey.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        // POST: api/AssignmentQuestion/AssignToMultipleUsers
         [HttpPost("AssignQuestionsToMultipleUsers")]
         public async Task<IActionResult> AssignQuestionsToMultipleUsers([FromBody] AssignmentQuestionMultipleDto assignmentQuestionMultipleDto)
         {
@@ -62,7 +61,6 @@ namespace PerformanceSurvey.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        // POST: api/AssignmentQuestion/AssignToDepartment
         [HttpPost("AssignQuestionsToDepartment")]
         public async Task<IActionResult> AssignQuestionsToDepartment([FromBody] AssignQuestionsToDepartmentDto assignmentQuestionMultipleDto)
         {
@@ -100,7 +98,6 @@ namespace PerformanceSurvey.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (ex) here if needed
                 return StatusCode(500, "An error occurred while assigning questions.");
             }
         }
@@ -122,12 +119,11 @@ namespace PerformanceSurvey.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (if logging is set up)
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("AssignedQuestionByUserID/{userId}")]
         public async Task<IActionResult> GetAssignmentQuestionsByUserId(int userId)
         {
@@ -135,7 +131,6 @@ namespace PerformanceSurvey.Controllers
             {
                 var questions = await _assignmentQuestionService.GetAssignmentQuestionsByUserIdAsync(userId);
 
-                // Check if questions were found
                 if (questions == null || !questions.Any())
                 {
                     return NotFound($"No assignment questions found for user with ID {userId}");
@@ -145,11 +140,10 @@ namespace PerformanceSurvey.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception details (e.g., using a logging framework like Serilog)
                 return StatusCode(500, $"An error occurred while retrieving assignment questions: {ex.Message}");
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("AssignedQuestionByUserIDs/{userIds}")]
         public async Task<IActionResult> GetAssignmentQuestionsByUserIds([FromQuery] List<int> userIds)
         {
@@ -162,7 +156,6 @@ namespace PerformanceSurvey.Controllers
             {
                 var questions = await _assignmentQuestionService.GetAssignmentQuestionsByUserIdsAsync(userIds);
 
-                // Check if questions were found
                 if (questions == null || !questions.Any())
                 {
                     return NotFound("No assignment questions found for the provided user IDs");
@@ -172,28 +165,26 @@ namespace PerformanceSurvey.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception details (e.g., using a logging framework like Serilog)
                 return StatusCode(500, $"An error occurred while retrieving assignment questions: {ex.Message}");
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteAnsweredQuestions/{userId}")]
         public async Task<IActionResult> DeleteAnsweredQuestions(int userId)
         {
             try
             {
                 await _assignmentQuestionService.DeleteAnsweredAssignmentQuestionsByUserIdAsync(userId);
-                return Ok(200); // Return 204 No Content if deletion is successful
+                return Ok(200); 
             }
             catch (Exception ex)
             {
-                // Log the error if necessary
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("users-with-pending-assignments")]
         public async Task<IActionResult> GetUsersWithPendingAssignments()
         {
@@ -201,12 +192,19 @@ namespace PerformanceSurvey.Controllers
 
             if (!users.Any())
             {
-                return NotFound("No users with pending assignments found.");
+                return Ok(new List<UserResponse>());
             }
 
             return Ok(users);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("clear-pending")]
+        public async Task<IActionResult> ClearAllPendingAssignments()
+        {
+            await _assignmentQuestionService.ClearAllPendingAssignmentsAsync();
+            return Ok(new { message = "All pending questions have been cleared successfully." });
+        }
 
     }
 

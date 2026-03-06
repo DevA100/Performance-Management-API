@@ -9,13 +9,12 @@ namespace PerformanceSurvey.Models
         public int QuestionId { get; set; }
 
         [Required]
-        [MaxLength(500)] // Adjust as needed
+        [MaxLength(500)] 
         public string QuestionText { get; set; }
 
         [Required]
         public int DepartmentId { get; set; }
 
-        // Navigation properties
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
 

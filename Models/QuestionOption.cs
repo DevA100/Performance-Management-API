@@ -16,7 +16,6 @@ namespace PerformanceSurvey.Models
 
         public int Score { get; set; }
 
-        // Navigation property
         [ForeignKey("QuestionId")]
         public Question DepartmentQuestion { get; set; }
     }

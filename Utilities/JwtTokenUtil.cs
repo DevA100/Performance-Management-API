@@ -12,7 +12,6 @@ namespace PerformanceSurvey.Utilities
     public class JwtTokenUtil
     {
 
-        //private readonly IConfiguration _configuration;
 
         private readonly JwtSettings _jwtSettings;
         public JwtTokenUtil(IOptions<JwtSettings> jwtsettings)
@@ -26,7 +25,6 @@ namespace PerformanceSurvey.Utilities
                 
                 new Claim(ClaimTypes.NameIdentifier, UserEmail),
                  new Claim(ClaimTypes.Role, Role),
-                  //new Claim(ClaimTypes.Role, "Admin"),
                   
 
             };
@@ -51,11 +49,7 @@ namespace PerformanceSurvey.Utilities
 
         }
 
-        //public string ValidateToken(string token)
-        //{
-
-
-        //}
+      
 
     }
 

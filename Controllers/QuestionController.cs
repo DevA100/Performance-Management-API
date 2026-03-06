@@ -77,7 +77,6 @@ namespace PerformanceSurvey.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        // GET: api/QuestionOption/{optionId}
         [HttpGet("QuestionOptionById{optionId}")]
         public async Task<IActionResult> GetOptionById(int optionId)
         {
@@ -90,7 +89,6 @@ namespace PerformanceSurvey.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        // GET: api/QuestionOption
         [HttpGet("GetAllQuestionOption")]
         public async Task<IActionResult> GetAllOptions()
         {
