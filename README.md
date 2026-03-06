@@ -1,4 +1,9 @@
 # Performance Management App
+## Deployment Note
+
+The original system was deployed within an on-premise enterprise environment.
+
+Sensitive data and integrations have been mocked for this public repository.
 
 **Automated Performance Survey & Appraisal System for Organizations**
 
