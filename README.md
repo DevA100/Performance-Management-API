@@ -65,5 +65,6 @@ The app is **role-based and secure**, providing administrators with flexible con
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/performance-survey-app.git
+git clone https://github.com/yourusername/pPerformance-Management-API
+.git
 cd performance-survey-app
